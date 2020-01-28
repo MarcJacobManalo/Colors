@@ -22,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 class ColorList : Fragment(){
-
+    //check update push
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
