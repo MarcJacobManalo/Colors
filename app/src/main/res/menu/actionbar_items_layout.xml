@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/opSetting"
+        android:title="@string/setting"/>
+    <item
+        android:id="@+id/opLogout"
+        android:title="@string/logout"/>
+
+</menu>

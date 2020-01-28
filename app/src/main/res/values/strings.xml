@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Colors</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
+    <string name="setting">Setting</string>
+    <string name="color_pantone">Color Pantone</string>
+    <string name="color_hex">Color Hex</string>
+    <string name="color_name">Color name</string>
+    <string name="color_names">Color Name</string>
+    <string name="color_1">Color 1</string>
+    <string name="sample">fsdf</string>
+    <string name="splashScreen">SplashScreen</string>
+    <string name="splashScreenDes">SplashScreenDes</string>
+    <string name="colors">COLORS</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+</resources>
