@@ -1,5 +1,4 @@
 package com.david.colors.adapter
-import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,7 @@ import com.david.colors.R
 import com.david.colors.api_retrofit.DataClassColorApi
 import kotlinx.android.synthetic.main.list_colors.view.*
 
-class CustomAdapter(private val username:List<DataClassColorApi>): RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
+class CustomAdapter(private val username:List<DataClassColorApi>, var clicklistener : OnClickItemsColor): RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -24,23 +23,28 @@ class CustomAdapter(private val username:List<DataClassColorApi>): RecyclerView.
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val model = username[position]
-        holder.tvName.text = model.name
+   /*     val model = username[position]
+        holder.tvName.text = model.name*/
+        holder.initialize(username[position],clicklistener)
 
-     /*   holder.itemView.setOnClickListener(View.OnClickListener {
-
-        })*/
 
     }
 
     class ViewHolder(itemView : View ) : RecyclerView.ViewHolder(itemView) {
         val tvName: TextView = itemView.colorsList
 
-        /*    init {
-                itemView.setOnClickListener {
-                 d("try",itemView.id.toString())
-                }
-            }*/
+        fun initialize(item: DataClassColorApi, action:OnClickItemsColor){
+            tvName.text = item.name
+            itemView.setOnClickListener {
+                action.onItemClicked(item,adapterPosition)
+
+            }
+        }
     }
 }
 
+interface OnClickItemsColor{
+
+    fun onItemClicked(item : DataClassColorApi, position : Int)
+
+}

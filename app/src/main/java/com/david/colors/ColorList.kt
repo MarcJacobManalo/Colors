@@ -1,10 +1,9 @@
 package com.david.colors
 
+
 import android.os.Bundle
-import android.util.Log
 import android.util.Log.d
 import android.view.*
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,13 +14,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.david.colors.api_retrofit.ColorListApi
 import com.david.colors.api_retrofit.GetUserService
 import com.david.colors.adapter.CustomAdapter
+import com.david.colors.adapter.OnClickItemsColor
 import com.david.colors.api_retrofit.DataClassColorApi
 import retrofit2.*
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-class ColorList : Fragment(){
+class ColorList : Fragment(),OnClickItemsColor{
+
+
     //check update push
     private lateinit var navController: NavController
 
@@ -54,12 +56,20 @@ class ColorList : Fragment(){
     })
 }
 
+
+
     fun showData(data: List<DataClassColorApi>) {
         val recyclerView = view!!.findViewById<RecyclerView>(R.id.color_list_RecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        val adapter = CustomAdapter(data)
+        val adapter = CustomAdapter(data,this)
         recyclerView.adapter = adapter
 
+    }
+    override fun onItemClicked(item: DataClassColorApi, position: Int) {
+        Toast.makeText(context,item.name,Toast.LENGTH_LONG).show()
+        d("name",item.name)
+        d("pantone",item.pantone_value)
+        d("color",item.color)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
