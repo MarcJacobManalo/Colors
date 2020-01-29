@@ -47,7 +47,9 @@
         tools:layout="@layout/fragment_color_list" >
         <action
             android:id="@+id/action_colorList_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_colorList_to_colorDetails"
             app:destination="@id/colorDetails" />
@@ -59,7 +61,12 @@
         tools:layout="@layout/fragment_color_details" >
         <action
             android:id="@+id/action_colorDetails_to_colorList"
-            app:destination="@id/colorList" />
+            app:destination="@id/colorList"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_colorDetails_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 
 </navigation>

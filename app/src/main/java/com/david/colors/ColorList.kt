@@ -1,7 +1,5 @@
 package com.david.colors
 
-
-import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.util.Log.d
@@ -32,31 +30,35 @@ class ColorList : Fragment(),OnClickItemsColor{
     super.onCreate(savedInstanceState)
     setHasOptionsMenu(true)
 
-
-    val retrofit = Retrofit.Builder()
-        .baseUrl("https://reqres.in/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-        .build()
-
-    val api = retrofit.create(GetUserService::class.java)
-    api.getAllColors().enqueue(object : Callback<ColorListApi> {
-
-        override fun onResponse(call: Call<ColorListApi>, response: Response<ColorListApi>) {
-            val body = response.body()
-            val colors = body?.data
-            d("jason", "onResponse: $colors")
-
-            showData(colors!!)
-        }
-
-        override fun onFailure(call: Call<ColorListApi>, t: Throwable) {
-            d("jason", "onFailure")
-            d("jason", "onFailure ${t.message}")
-        }
-
-    })
 }
+    override fun onResume() {
+        super.onResume()
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://reqres.in/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
+
+        val api = retrofit.create(GetUserService::class.java)
+        api.getAllColors().enqueue(object : Callback<ColorListApi> {
+
+            override fun onResponse(call: Call<ColorListApi>, response: Response<ColorListApi>) {
+                val body = response.body()
+                val colors = body?.data
+                d("jason", "onResponse: $colors")
+
+                showData(colors!!)
+            }
+
+            override fun onFailure(call: Call<ColorListApi>, t: Throwable) {
+                d("jason", "onFailure")
+                d("jason", "onFailure ${t.message}")
+            }
+
+        })
+
+    }
 
     fun showData(data: List<DataClassColorApi>) {
         val recyclerView = view!!.findViewById<RecyclerView>(R.id.color_list_RecyclerView)
@@ -68,6 +70,8 @@ class ColorList : Fragment(),OnClickItemsColor{
         adapter.notifyDataSetChanged()
 
     }
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_color_list, container, false)
 
@@ -77,6 +81,7 @@ class ColorList : Fragment(),OnClickItemsColor{
         navController = Navigation.findNavController(view)
 
     }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         super.onCreateOptionsMenu(menu, inflater)

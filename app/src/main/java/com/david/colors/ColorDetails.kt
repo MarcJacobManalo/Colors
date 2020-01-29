@@ -15,6 +15,7 @@ import androidx.navigation.Navigation
 
 class ColorDetails : Fragment() {
     private lateinit var navController: NavController
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -58,7 +59,7 @@ class ColorDetails : Fragment() {
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.opLogout ->  navController.navigate(R.id.action_colorDetails_to_colorList)
+            R.id.opLogout ->  navController.navigate(R.id.action_colorDetails_to_loginFragment)
             R.id.opSetting -> Toast.makeText(activity, "Setting!", Toast.LENGTH_SHORT).show()
         }
         return super.onOptionsItemSelected(item)
