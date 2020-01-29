@@ -1,6 +1,8 @@
 package com.david.colors
 
 
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.util.Log.d
 import android.view.*
@@ -23,13 +25,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ColorList : Fragment(),OnClickItemsColor{
 
-
     //check update push
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setHasOptionsMenu(true)
+
 
     val retrofit = Retrofit.Builder()
         .baseUrl("https://reqres.in/")
@@ -45,7 +47,7 @@ class ColorList : Fragment(),OnClickItemsColor{
             val colors = body?.data
             d("jason", "onResponse: $colors")
 
-            colors?.let { showData(it) }
+            showData(colors!!)
         }
 
         override fun onFailure(call: Call<ColorListApi>, t: Throwable) {
@@ -56,22 +58,16 @@ class ColorList : Fragment(),OnClickItemsColor{
     })
 }
 
-
-
     fun showData(data: List<DataClassColorApi>) {
         val recyclerView = view!!.findViewById<RecyclerView>(R.id.color_list_RecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.hasFixedSize()
+
         val adapter = CustomAdapter(data,this)
         recyclerView.adapter = adapter
+        adapter.notifyDataSetChanged()
 
     }
-    override fun onItemClicked(item: DataClassColorApi, position: Int) {
-        Toast.makeText(context,item.name,Toast.LENGTH_LONG).show()
-        d("name",item.name)
-        d("pantone",item.pantone_value)
-        d("color",item.color)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_color_list, container, false)
 
@@ -81,20 +77,35 @@ class ColorList : Fragment(),OnClickItemsColor{
         navController = Navigation.findNavController(view)
 
     }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.actionbar_items_layout, menu)
 
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.opLogout ->  navController.navigate(R.id.action_colorList_to_loginFragment)
             R.id.opSetting -> Toast.makeText(activity, "Setting!", Toast.LENGTH_SHORT).show()
         }
         return super.onOptionsItemSelected(item)
+
+    }
+    override fun onItemClicked(item: DataClassColorApi, position: Int) {
+        val name = item.name
+        val pantone = item.pantone_value
+        val color = item.color
+
+        val editor = activity!!.getSharedPreferences("SP",MODE_PRIVATE).edit()
+        editor.putString("NAME",name)
+        editor.putString("PANTONE",pantone)
+        editor.putString("COLOR",color)
+        editor.apply()
+        d("n",name)
+        d("p",pantone)
+        d("c",color)
+
+        navController.navigate(R.id.action_colorList_to_colorDetails)
 
     }
 

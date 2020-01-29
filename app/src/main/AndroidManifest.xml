@@ -22,6 +22,8 @@
         </activity>
             <activity android:name="RegisterFragment"
                 android:parentActivityName="LoginFragment"/>
+        <activity android:name="ColorDetails"
+            android:parentActivityName="ColorList"/>
     </application>
 
 </manifest>

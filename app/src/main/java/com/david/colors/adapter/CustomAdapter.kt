@@ -23,10 +23,8 @@ class CustomAdapter(private val username:List<DataClassColorApi>, var clickliste
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-   /*     val model = username[position]
-        holder.tvName.text = model.name*/
-        holder.initialize(username[position],clicklistener)
 
+        holder.initialize(username[position],clicklistener)
 
     }
 

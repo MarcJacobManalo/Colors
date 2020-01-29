@@ -48,6 +48,18 @@
         <action
             android:id="@+id/action_colorList_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_colorList_to_colorDetails"
+            app:destination="@id/colorDetails" />
+    </fragment>
+    <fragment
+        android:id="@+id/colorDetails"
+        android:name="com.david.colors.ColorDetails"
+        android:label="fragment_color_details"
+        tools:layout="@layout/fragment_color_details" >
+        <action
+            android:id="@+id/action_colorDetails_to_colorList"
+            app:destination="@id/colorList" />
     </fragment>
 
 </navigation>
