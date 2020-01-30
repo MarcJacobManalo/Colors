@@ -15,58 +15,69 @@
             app:destination="@id/loginFragment"
             app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_splashFragment_to_colorList"
+            app:destination="@id/colorList" />
     </fragment>
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.david.colors.LoginFragment"
+        android:name="com.david.colors.loginAndRegister.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
-            app:destination="@id/registerFragment"/>
+            app:destination="@id/registerFragment" />
         <action
             android:id="@+id/action_loginFragment_to_colorList"
-            app:destination="@id/colorList" />
+            app:destination="@id/colorList"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.david.colors.RegisterFragment"
+        android:name="com.david.colors.loginAndRegister.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
             android:id="@+id/action_registerFragment_to_colorList"
-            app:destination="@id/colorList" />
+            app:destination="@id/colorList"
+            app:popUpTo="@id/registerFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
         android:id="@+id/colorList"
-        android:name="com.david.colors.ColorList"
+        android:name="com.david.colors.loginAndRegister.ColorList"
         android:label="fragment_color_list"
         tools:layout="@layout/fragment_color_list" >
         <action
             android:id="@+id/action_colorList_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:popUpTo="@id/splashFragment"
-            app:popUpToInclusive="true"/>
+            app:destination="@id/loginFragment" />
         <action
             android:id="@+id/action_colorList_to_colorDetails"
             app:destination="@id/colorDetails" />
+        <action
+            android:id="@+id/action_colorList_to_registerFragment"
+            app:destination="@id/registerFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/colorDetails"
-        android:name="com.david.colors.ColorDetails"
+        android:name="com.david.colors.recyclerview.ColorDetails"
         android:label="fragment_color_details"
         tools:layout="@layout/fragment_color_details" >
         <action
             android:id="@+id/action_colorDetails_to_colorList"
             app:destination="@id/colorList"
-            app:popUpTo="@id/splashFragment"
+            app:popUpTo="@id/colorDetails"
             app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_colorDetails_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/colorDetails"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>

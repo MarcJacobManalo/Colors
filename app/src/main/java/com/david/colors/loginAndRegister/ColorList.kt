@@ -1,4 +1,4 @@
-package com.david.colors
+package com.david.colors.loginAndRegister
 
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
@@ -19,18 +19,25 @@ import com.david.colors.api_retrofit.DataClassColorApi
 import retrofit2.*
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import android.content.SharedPreferences
+import com.david.colors.R
 
 
 class ColorList : Fragment(),OnClickItemsColor{
 
-    //check update push
-    private lateinit var navController: NavController
+    private var navController: NavController?= null
+    private lateinit var pref: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setHasOptionsMenu(true)
+        setHasOptionsMenu(true)
 
-}
+        pref = context!!.getSharedPreferences("user_details", MODE_PRIVATE)
+        navController?.navigate(R.id.action_colorList_to_loginFragment)
+        val userName = pref.getString("username",null)
+        Toast.makeText(context,"Hello, $userName ",Toast.LENGTH_SHORT).show()
+
+    }
     override fun onResume() {
         super.onResume()
 
@@ -54,12 +61,12 @@ class ColorList : Fragment(),OnClickItemsColor{
             override fun onFailure(call: Call<ColorListApi>, t: Throwable) {
                 d("jason", "onFailure")
                 d("jason", "onFailure ${t.message}")
+
             }
 
         })
 
     }
-
     fun showData(data: List<DataClassColorApi>) {
         val recyclerView = view!!.findViewById<RecyclerView>(R.id.color_list_RecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -70,8 +77,6 @@ class ColorList : Fragment(),OnClickItemsColor{
         adapter.notifyDataSetChanged()
 
     }
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_color_list, container, false)
 
@@ -81,7 +86,6 @@ class ColorList : Fragment(),OnClickItemsColor{
         navController = Navigation.findNavController(view)
 
     }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         super.onCreateOptionsMenu(menu, inflater)
@@ -89,12 +93,18 @@ class ColorList : Fragment(),OnClickItemsColor{
 
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.opLogout ->  navController.navigate(R.id.action_colorList_to_loginFragment)
-            R.id.opSetting -> Toast.makeText(activity, "Setting!", Toast.LENGTH_SHORT).show()
-        }
-        return super.onOptionsItemSelected(item)
+        if (item.itemId == R.id.opLogout) {
+                val editor = pref.edit()
+                editor.clear()
+                editor.apply()
+                navController?.navigate(R.id.action_colorList_to_loginFragment)
 
+        }
+        else if (item.itemId == R.id.opSetting){
+            Toast.makeText(activity, "Setting!", Toast.LENGTH_SHORT).show()
+        }
+
+        return super.onOptionsItemSelected(item)
     }
     override fun onItemClicked(item: DataClassColorApi, position: Int) {
         val name = item.name
@@ -110,8 +120,7 @@ class ColorList : Fragment(),OnClickItemsColor{
         d("p",pantone)
         d("c",color)
 
-        navController.navigate(R.id.action_colorList_to_colorDetails)
-
+        navController?.navigate(R.id.action_colorList_to_colorDetails)
     }
 
 }

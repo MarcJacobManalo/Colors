@@ -1,4 +1,4 @@
-package com.david.colors
+package com.david.colors.loginAndRegister
 
 
 import android.os.Bundle
@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.david.colors.R
 import kotlinx.android.synthetic.main.fragment_register.*
 
 
@@ -58,7 +59,7 @@ class RegisterFragment : Fragment(),View.OnClickListener {
             username.length > 15 -> tv_user_reg_frag.error = "Email too long"
             password.isEmpty() -> tv_pass_reg_frag.error = "Please fill this form"
             else -> when (v!!.id) {
-                R.id.btn_register_reg_frag-> navController.navigate(R.id.action_registerFragment_to_colorList)
+                R.id.btn_register_reg_frag -> navController.navigate(R.id.action_registerFragment_to_colorList)
             }
         }
     }

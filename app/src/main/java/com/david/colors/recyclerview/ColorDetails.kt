@@ -1,4 +1,4 @@
-package com.david.colors
+package com.david.colors.recyclerview
 
 
 import android.content.Context.MODE_PRIVATE
@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.david.colors.R
 
 
 class ColorDetails : Fragment() {
