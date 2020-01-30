@@ -17,9 +17,8 @@ import com.david.colors.R
  class LoginFragment : Fragment(),View.OnClickListener {
 
 
-      var navController: NavController? = null
+     var navController: NavController? = null
      private lateinit var pref: SharedPreferences
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,12 +30,13 @@ import com.david.colors.R
          super.onResume()
 
          pref = context!!.getSharedPreferences("user_details", MODE_PRIVATE)
-         when (pref.contains("username") ) {
-             true ->navController?.navigate(R.id.action_loginFragment_to_colorList)
+         if (pref.contains("username")) {
+              navController?.navigate(R.id.action_loginFragment_to_colorList)
          }
 
          d("tag",pref.contains("username").toString())
          d("tag",pref.contains("password").toString())
+
      }
 
      override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

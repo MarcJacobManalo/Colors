@@ -49,7 +49,7 @@
 
     <fragment
         android:id="@+id/colorList"
-        android:name="com.david.colors.loginAndRegister.ColorList"
+        android:name="com.david.colors.recyclerview.ColorList"
         android:label="fragment_color_list"
         tools:layout="@layout/fragment_color_list" >
         <action
@@ -76,8 +76,7 @@
         <action
             android:id="@+id/action_colorDetails_to_loginFragment"
             app:destination="@id/loginFragment"
-            app:popUpTo="@id/colorDetails"
-            app:popUpToInclusive="true" />
+            />
     </fragment>
 
 </navigation>

@@ -1,7 +1,10 @@
 package com.david.colors.loginAndRegister
 
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Button
@@ -15,7 +18,8 @@ import kotlinx.android.synthetic.main.fragment_register.*
 
 class RegisterFragment : Fragment(),View.OnClickListener {
 
-    private lateinit var navController:NavController
+
+    private var navController: NavController? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,17 +54,20 @@ class RegisterFragment : Fragment(),View.OnClickListener {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onClick(v: View?) {
+    override fun onClick(v: View) {
         val username = tv_user_reg_frag.text.toString()
         val password = tv_pass_reg_frag.text.toString()
 
-        when {
-            username.isEmpty() -> tv_user_reg_frag.error = "Please fill this form"
-            username.length > 15 -> tv_user_reg_frag.error = "Email too long"
-            password.isEmpty() -> tv_pass_reg_frag.error = "Please fill this form"
-            else -> when (v!!.id) {
-                R.id.btn_register_reg_frag -> navController.navigate(R.id.action_registerFragment_to_colorList)
+        if(v.id == R.id.btn_register_reg_frag){
+            if (!(username.trim().isEmpty() || password.trim().isEmpty())) {
+
+                    Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
+                    navController?.navigate(R.id.action_registerFragment_to_colorList)
+
+            } else {
+                Toast.makeText(context,"Enter credentials",Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 }

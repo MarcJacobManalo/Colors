@@ -1,4 +1,4 @@
-package com.david.colors.loginAndRegister
+package com.david.colors.recyclerview
 
 import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
@@ -34,9 +34,10 @@ class ColorList : Fragment(),OnClickItemsColor{
 
         pref = context!!.getSharedPreferences("user_details", MODE_PRIVATE)
         navController?.navigate(R.id.action_colorList_to_loginFragment)
-        val userName = pref.getString("username",null)
-        Toast.makeText(context,"Hello, $userName ",Toast.LENGTH_SHORT).show()
-
+        val userName = pref.getString("username","User")
+        if(userName != null){
+            Toast.makeText(context,"Hello, $userName ",Toast.LENGTH_SHORT).show()
+        }
     }
     override fun onResume() {
         super.onResume()
@@ -53,17 +54,16 @@ class ColorList : Fragment(),OnClickItemsColor{
             override fun onResponse(call: Call<ColorListApi>, response: Response<ColorListApi>) {
                 val body = response.body()
                 val colors = body?.data
-                d("jason", "onResponse: $colors")
+                d("RESPONSE", "onResponse: $colors")
 
                 showData(colors!!)
             }
 
             override fun onFailure(call: Call<ColorListApi>, t: Throwable) {
-                d("jason", "onFailure")
-                d("jason", "onFailure ${t.message}")
+                d("FAILURE", "onFailure")
+                d("FAILURE", "onFailure ${t.message}")
 
             }
-
         })
 
     }
@@ -97,6 +97,7 @@ class ColorList : Fragment(),OnClickItemsColor{
                 val editor = pref.edit()
                 editor.clear()
                 editor.apply()
+
                 navController?.navigate(R.id.action_colorList_to_loginFragment)
 
         }

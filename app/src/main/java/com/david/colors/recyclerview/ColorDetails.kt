@@ -2,6 +2,7 @@ package com.david.colors.recyclerview
 
 
 import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -15,7 +16,8 @@ import com.david.colors.R
 
 
 class ColorDetails : Fragment() {
-    private lateinit var navController: NavController
+    //private  var navController: NavController? = null
+    private lateinit var pref: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,9 +35,9 @@ class ColorDetails : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = Navigation.findNavController(view)
+      //  navController = Navigation.findNavController(view)
 
-        val pref = activity!!.getSharedPreferences("SP",MODE_PRIVATE)
+        pref = activity!!.getSharedPreferences("SP",MODE_PRIVATE)
 
         val cName = pref.getString("NAME","def").toString()
         val cPan = pref.getString("PANTONE","def").toString()
@@ -53,17 +55,24 @@ class ColorDetails : Fragment() {
         nameD.text = cName
         pantoneD.text = cPan
     }
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+       (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.actionbar_items_layout, menu)
+        //inflater.inflate(R.menu.actionbar_items_layout, menu)
     }
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.opLogout ->  navController.navigate(R.id.action_colorDetails_to_loginFragment)
-            R.id.opSetting -> Toast.makeText(activity, "Setting!", Toast.LENGTH_SHORT).show()
-        }
-        return super.onOptionsItemSelected(item)
+    /*  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+         if (item.itemId == R.id.opLogout) {
+             val editor = pref.edit()
+             editor.clear()
+             editor.apply()
+             navController?.navigate(R.id.action_colorDetails_to_loginFragment)
+         }
 
-    }
+         else if(item.itemId == R.id.opSetting ){
+           Toast.makeText(activity, "Setting!", Toast.LENGTH_SHORT).show()
+
+         }
+         return super.onOptionsItemSelected(item)
+
+     }*/
 }
