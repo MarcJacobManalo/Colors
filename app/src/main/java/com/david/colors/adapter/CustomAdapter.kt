@@ -8,7 +8,7 @@ import com.david.colors.R
 import com.david.colors.api_retrofit.DataClassColorApi
 import kotlinx.android.synthetic.main.list_colors.view.*
 
-class CustomAdapter(private val username:List<DataClassColorApi>, var clicklistener : OnClickItemsColor): RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
+class CustomAdapter(private val username:List<DataClassColorApi>,  var clicklistener : OnClickItemsColor): RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,7 +29,7 @@ class CustomAdapter(private val username:List<DataClassColorApi>, var clickliste
     }
 
     class ViewHolder(itemView : View ) : RecyclerView.ViewHolder(itemView) {
-        val tvName: TextView = itemView.colorsList
+         val tvName: TextView = itemView.colorsList
 
         fun initialize(item: DataClassColorApi, action:OnClickItemsColor){
             tvName.text = item.name

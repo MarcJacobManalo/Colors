@@ -11,7 +11,6 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.david.colors.api_retrofit.ColorListApi
 import com.david.colors.api_retrofit.GetUserService
 import com.david.colors.adapter.CustomAdapter
 import com.david.colors.adapter.OnClickItemsColor
@@ -21,23 +20,33 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import android.content.SharedPreferences
 import com.david.colors.R
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 
 class ColorList : Fragment(),OnClickItemsColor{
 
     private var navController: NavController?= null
     private lateinit var pref: SharedPreferences
+    private var mCompositeDisposable : CompositeDisposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
+        mCompositeDisposable = CompositeDisposable()
+
         pref = context!!.getSharedPreferences("user_details", MODE_PRIVATE)
-        navController?.navigate(R.id.action_colorList_to_loginFragment)
-        val userName = pref.getString("username","User")
-        if(userName != null){
-            Toast.makeText(context,"Hello, $userName ",Toast.LENGTH_SHORT).show()
+        val userName = pref.getString("username","User ")
+
+        if (userName == "admin") {
+            Toast.makeText(context, "Hello, $userName ", Toast.LENGTH_SHORT).show()
         }
+        else if (userName == "123") {
+            Toast.makeText(context, "Hello, $userName ", Toast.LENGTH_SHORT).show()
+        }
+
     }
     override fun onResume() {
         super.onResume()
@@ -46,28 +55,40 @@ class ColorList : Fragment(),OnClickItemsColor{
             .baseUrl("https://reqres.in/")
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
+            .build().create(GetUserService::class.java)
 
-        val api = retrofit.create(GetUserService::class.java)
+        mCompositeDisposable?.add(retrofit.getAllColors()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                handleResponse(it.data)
+                d("-->tag<--", it.data.toString())
+            })
+
+
+
+      /*  val api = retrofit.create(GetUserService::class.java)
         api.getAllColors().enqueue(object : Callback<ColorListApi> {
 
             override fun onResponse(call: Call<ColorListApi>, response: Response<ColorListApi>) {
                 val body = response.body()
                 val colors = body?.data
-                d("RESPONSE", "onResponse: $colors")
+                d("jason", "onResponse: $colors")
 
                 showData(colors!!)
             }
 
             override fun onFailure(call: Call<ColorListApi>, t: Throwable) {
-                d("FAILURE", "onFailure")
-                d("FAILURE", "onFailure ${t.message}")
+                d("jason", "onFailure")
+                d("jason", "onFailure ${t.message}")
 
             }
-        })
+
+        })*/
 
     }
-    fun showData(data: List<DataClassColorApi>) {
+
+    private fun handleResponse(data: List<DataClassColorApi>) {
         val recyclerView = view!!.findViewById<RecyclerView>(R.id.color_list_RecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.hasFixedSize()
@@ -122,6 +143,11 @@ class ColorList : Fragment(),OnClickItemsColor{
         d("c",color)
 
         navController?.navigate(R.id.action_colorList_to_colorDetails)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mCompositeDisposable?.clear()
     }
 
 }

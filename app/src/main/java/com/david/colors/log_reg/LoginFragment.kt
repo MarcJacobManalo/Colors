@@ -1,4 +1,4 @@
-package com.david.colors.loginAndRegister
+package com.david.colors.log_reg
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -23,7 +23,6 @@ import com.david.colors.R
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
     }
 
      override fun onResume() {
@@ -32,6 +31,9 @@ import com.david.colors.R
          pref = context!!.getSharedPreferences("user_details", MODE_PRIVATE)
          if (pref.contains("username")) {
               navController?.navigate(R.id.action_loginFragment_to_colorList)
+         }
+         else if (pref.contains("123")) {
+             navController?.navigate(R.id.action_loginFragment_to_colorList)
          }
 
          d("tag",pref.contains("username").toString())

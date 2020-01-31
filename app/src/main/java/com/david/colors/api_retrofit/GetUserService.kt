@@ -1,13 +1,13 @@
 package com.david.colors.api_retrofit
 
 
-import retrofit2.Call
+import io.reactivex.Observable
 import retrofit2.http.GET
 
 interface GetUserService {
 
     @GET("api/unknown")
-    fun getAllColors(): Call<ColorListApi>
+    fun getAllColors(): Observable<ColorListApi>
 
 }
 

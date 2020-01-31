@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.david.colors.loginAndRegister.LoginFragment"
+        android:name="com.david.colors.log_reg.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.david.colors.loginAndRegister.RegisterFragment"
+        android:name="com.david.colors.log_reg.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action

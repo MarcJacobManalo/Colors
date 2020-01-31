@@ -7,16 +7,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import com.david.colors.R
 
 
 class ColorDetails : Fragment() {
-    //private  var navController: NavController? = null
+
     private lateinit var pref: SharedPreferences
 
     override fun onCreateView(
@@ -35,7 +32,6 @@ class ColorDetails : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-      //  navController = Navigation.findNavController(view)
 
         pref = activity!!.getSharedPreferences("SP",MODE_PRIVATE)
 
@@ -58,21 +54,6 @@ class ColorDetails : Fragment() {
    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         super.onCreateOptionsMenu(menu, inflater)
-        //inflater.inflate(R.menu.actionbar_items_layout, menu)
+
     }
-    /*  override fun onOptionsItemSelected(item: MenuItem): Boolean {
-         if (item.itemId == R.id.opLogout) {
-             val editor = pref.edit()
-             editor.clear()
-             editor.apply()
-             navController?.navigate(R.id.action_colorDetails_to_loginFragment)
-         }
-
-         else if(item.itemId == R.id.opSetting ){
-           Toast.makeText(activity, "Setting!", Toast.LENGTH_SHORT).show()
-
-         }
-         return super.onOptionsItemSelected(item)
-
-     }*/
 }
