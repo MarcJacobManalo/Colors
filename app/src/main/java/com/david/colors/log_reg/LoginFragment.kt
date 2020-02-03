@@ -95,6 +95,5 @@ import com.david.colors.R
         }else if (v.id == R.id.btn_register) {
             navController?.navigate(R.id.action_loginFragment_to_registerFragment)
         }
-
     }
 }

@@ -11,15 +11,15 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.david.colors.api_retrofit.GetUserService
 import com.david.colors.adapter.CustomAdapter
 import com.david.colors.adapter.OnClickItemsColor
-import com.david.colors.api_retrofit.DataClassColorApi
+import com.david.colors.model.ColorDataModels
 import retrofit2.*
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import android.content.SharedPreferences
 import com.david.colors.R
+import com.david.colors.`interface`.RetrofitInit
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -51,12 +51,7 @@ class ColorList : Fragment(),OnClickItemsColor{
     override fun onResume() {
         super.onResume()
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://reqres.in/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build().create(GetUserService::class.java)
-
+        val retrofit = RetrofitInit.create()
         mCompositeDisposable?.add(retrofit.getAllColors()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
@@ -64,31 +59,9 @@ class ColorList : Fragment(),OnClickItemsColor{
                 handleResponse(it.data)
                 d("-->tag<--", it.data.toString())
             })
-
-
-
-      /*  val api = retrofit.create(GetUserService::class.java)
-        api.getAllColors().enqueue(object : Callback<ColorListApi> {
-
-            override fun onResponse(call: Call<ColorListApi>, response: Response<ColorListApi>) {
-                val body = response.body()
-                val colors = body?.data
-                d("jason", "onResponse: $colors")
-
-                showData(colors!!)
-            }
-
-            override fun onFailure(call: Call<ColorListApi>, t: Throwable) {
-                d("jason", "onFailure")
-                d("jason", "onFailure ${t.message}")
-
-            }
-
-        })*/
-
     }
 
-    private fun handleResponse(data: List<DataClassColorApi>) {
+    private fun handleResponse(data: List<ColorDataModels>) {
         val recyclerView = view!!.findViewById<RecyclerView>(R.id.color_list_RecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.hasFixedSize()
@@ -114,21 +87,20 @@ class ColorList : Fragment(),OnClickItemsColor{
 
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.opLogout) {
+        when(item.itemId) {
+              R.id.opLogout -> {
                 val editor = pref.edit()
                 editor.clear()
                 editor.apply()
-
                 navController?.navigate(R.id.action_colorList_to_loginFragment)
 
-        }
-        else if (item.itemId == R.id.opSetting){
-            Toast.makeText(activity, "Setting!", Toast.LENGTH_SHORT).show()
+            }
+             R.id.opSetting -> Toast.makeText(activity, "Setting!", Toast.LENGTH_SHORT).show()
         }
 
         return super.onOptionsItemSelected(item)
     }
-    override fun onItemClicked(item: DataClassColorApi, position: Int) {
+    override fun onItemClicked(item: ColorDataModels, position: Int) {
         val name = item.name
         val pantone = item.pantone_value
         val color = item.color
@@ -141,7 +113,6 @@ class ColorList : Fragment(),OnClickItemsColor{
         d("n",name)
         d("p",pantone)
         d("c",color)
-
         navController?.navigate(R.id.action_colorList_to_colorDetails)
     }
 

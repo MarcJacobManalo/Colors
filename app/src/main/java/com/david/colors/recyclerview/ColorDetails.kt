@@ -3,9 +3,11 @@ package com.david.colors.recyclerview
 
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -46,10 +48,11 @@ class ColorDetails : Fragment() {
         val colorD = view.findViewById<TextView>(R.id.color_d)
         val nameD = view.findViewById<TextView>(R.id.name_d)
         val pantoneD = view.findViewById<TextView>(R.id.pantone_d)
-
+        val bg = view.findViewById<LinearLayout>(R.id.color_bg)
         colorD.text = cCol
         nameD.text = cName
         pantoneD.text = cPan
+        bg.setBackgroundColor(Color.parseColor(cCol))
     }
    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)

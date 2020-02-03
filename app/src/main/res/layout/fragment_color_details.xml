@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".ColorDetails"
     android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center"
+    android:id="@+id/color_bg">
 
 
     <TextView
@@ -13,6 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="NAME"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
         android:textSize="30sp"
         android:textAlignment="center"/>
     <TextView
@@ -20,6 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="PANTONE"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
         android:textSize="30sp"
         android:textAlignment="center"/>
     <TextView
@@ -27,6 +32,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="COLOR"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
         android:textSize="30sp"
         android:textAlignment="center"/>
 
