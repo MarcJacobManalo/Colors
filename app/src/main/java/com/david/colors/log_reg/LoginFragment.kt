@@ -13,8 +13,13 @@ import kotlinx.android.synthetic.main.fragment_login.*
 import android.content.Context.MODE_PRIVATE
 import android.util.Log.d
 import com.david.colors.R
+import com.david.colors.`interface`.RetrofitInit
+import com.david.colors.model.LoginDataModels
+import retrofit2.Call
+import retrofit2.Response
+import javax.security.auth.callback.Callback
 
- class LoginFragment : Fragment(),View.OnClickListener {
+class LoginFragment : Fragment(),View.OnClickListener {
 
 
      var navController: NavController? = null
@@ -23,16 +28,17 @@ import com.david.colors.R
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        postRequest()
     }
 
-     override fun onResume() {
+    override fun onResume() {
          super.onResume()
+         session()
+     }
 
+     private fun session() {
          pref = context!!.getSharedPreferences("user_details", MODE_PRIVATE)
          if (pref.contains("username")) {
-              navController?.navigate(R.id.action_loginFragment_to_colorList)
-         }
-         else if (pref.contains("123")) {
              navController?.navigate(R.id.action_loginFragment_to_colorList)
          }
 
@@ -48,9 +54,7 @@ import com.david.colors.R
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         navController = Navigation.findNavController(view)
-        view.findViewById<Button>(R.id.btn_login).setOnClickListener(this)
         view.findViewById<Button>(R.id.btn_register).setOnClickListener(this)
     }
 
@@ -72,28 +76,56 @@ import com.david.colors.R
     }
 
     override fun onClick(v: View) {
-        val username = tv_user.text.toString().trim()
-        val password = tv_pass.text.toString().trim()
+       when(v.id) {
+           R.id.btn_register -> navController?.navigate(R.id.action_loginFragment_to_registerFragment)
+        }
+    }
 
+    private fun postRequest() {
+        val credentials = LoginDataModels("eve.holt@reqres.in","cityslicka")
 
-        if(v.id == R.id.btn_login){
-            if (!(username.trim().isEmpty() || password.trim().isEmpty())) {
-                if (username == "admin" && password == "123") {
-                    val editor = pref.edit()
-                    editor.putString("username", username)
-                    editor.putString("password", password)
-                    editor.apply()
-                    Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
-                    navController?.navigate(R.id.action_loginFragment_to_colorList)
-                } else {
-                    Toast.makeText(context,"Login Failed",Toast.LENGTH_SHORT).show()
-                }
-            } else {
-                Toast.makeText(context,"Enter credentials",Toast.LENGTH_SHORT).show()
+        val retrofit = RetrofitInit.create().loginEmailPassword(credentials)
+
+        retrofit.enqueue(object : retrofit2.Callback<LoginDataModels> {
+            override fun onResponse(call: Call<LoginDataModels>, response: Response<LoginDataModels>) {
+                val code = response.code()
+                d("onResponse",code.toString())
+                login(code)
             }
 
-        }else if (v.id == R.id.btn_register) {
-            navController?.navigate(R.id.action_loginFragment_to_registerFragment)
+            override fun onFailure(call: Call<LoginDataModels>, t: Throwable) {
+                d("onFailure",t.message.toString())
+            }
+
+        })
+    }
+    private fun login(code: Int) {
+
+        val submitbtn = view?.findViewById<Button>(R.id.btn_login)
+        submitbtn?.setOnClickListener{
+
+            val username = tv_user.text.toString().trim()
+            val password = tv_pass.text.toString().trim()
+
+            if(code == 200){
+                if (!(username.isEmpty() && password.isEmpty())) {
+                    if(username == "eve.holt@reqres.in" && password == "cityslicka"){
+                        val editor = pref.edit()
+                        editor.putString("username",username)
+                        editor.putString("password",password)
+                        editor.apply()
+                        navController?.navigate(R.id.action_loginFragment_to_colorList)
+                        Toast.makeText(context,"Login Successful",Toast.LENGTH_SHORT).show()
+
+                    }else Toast.makeText(context,"Wrong email/password",Toast.LENGTH_SHORT).show()
+
+                }else Toast.makeText(context,"Empty Field",Toast.LENGTH_SHORT).show()
+
+            }else Toast.makeText(context,"Server not found",Toast.LENGTH_SHORT).show()
+
+
         }
+
+
     }
 }

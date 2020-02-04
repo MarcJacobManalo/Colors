@@ -38,13 +38,12 @@ class ColorList : Fragment(),OnClickItemsColor{
         mCompositeDisposable = CompositeDisposable()
 
         pref = context!!.getSharedPreferences("user_details", MODE_PRIVATE)
-        val userName = pref.getString("username","User ")
-
-        if (userName == "admin") {
-            Toast.makeText(context, "Hello, $userName ", Toast.LENGTH_SHORT).show()
+        val userName = pref.getString("password","User ")!!
+        if (userName.contains("cityslicka")) {
+            Toast.makeText(context, "Hello, eve! ", Toast.LENGTH_SHORT).show()
         }
-        else if (userName == "123") {
-            Toast.makeText(context, "Hello, $userName ", Toast.LENGTH_SHORT).show()
+        else if (userName.contains("pistol")) {
+            Toast.makeText(context, "Hello, holt! ", Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -57,7 +56,7 @@ class ColorList : Fragment(),OnClickItemsColor{
             .subscribeOn(Schedulers.io())
             .subscribe {
                 handleResponse(it.data)
-                d("-->tag<--", it.data.toString())
+                d("-->COLOR_DETAILS<--", it.data.toString())
             })
     }
 
