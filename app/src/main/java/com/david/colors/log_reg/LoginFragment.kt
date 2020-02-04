@@ -15,19 +15,24 @@ import android.util.Log.d
 import com.david.colors.R
 import com.david.colors.`interface`.RetrofitInit
 import com.david.colors.model.LoginDataModels
+import io.reactivex.disposables.CompositeDisposable
 import retrofit2.Call
 import retrofit2.Response
-import javax.security.auth.callback.Callback
+
 
 class LoginFragment : Fragment(),View.OnClickListener {
 
 
-     var navController: NavController? = null
+     private var navController: NavController? = null
      private lateinit var pref: SharedPreferences
+    private var mCompositeDisposable : CompositeDisposable? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
+        mCompositeDisposable = CompositeDisposable()
         postRequest()
     }
 
@@ -82,31 +87,31 @@ class LoginFragment : Fragment(),View.OnClickListener {
     }
 
     private fun postRequest() {
+
         val credentials = LoginDataModels("eve.holt@reqres.in","cityslicka")
 
-        val retrofit = RetrofitInit.create().loginEmailPassword(credentials)
+        val retrofitInit = RetrofitInit.create().loginEmailPassword(credentials)
 
-        retrofit.enqueue(object : retrofit2.Callback<LoginDataModels> {
+       retrofitInit.enqueue(object : retrofit2.Callback<LoginDataModels> {
+
             override fun onResponse(call: Call<LoginDataModels>, response: Response<LoginDataModels>) {
                 val code = response.code()
                 d("onResponse",code.toString())
                 login(code)
             }
-
             override fun onFailure(call: Call<LoginDataModels>, t: Throwable) {
                 d("onFailure",t.message.toString())
             }
-
         })
-    }
-    private fun login(code: Int) {
 
-        val submitbtn = view?.findViewById<Button>(R.id.btn_login)
-        submitbtn?.setOnClickListener{
+    }
+    private fun login(code:Int) {
+
+        val submitBtn = view?.findViewById<Button>(R.id.btn_login)
+        submitBtn?.setOnClickListener{
 
             val username = tv_user.text.toString().trim()
             val password = tv_pass.text.toString().trim()
-
             if(code == 200){
                 if (!(username.isEmpty() && password.isEmpty())) {
                     if(username == "eve.holt@reqres.in" && password == "cityslicka"){
@@ -120,12 +125,7 @@ class LoginFragment : Fragment(),View.OnClickListener {
                     }else Toast.makeText(context,"Wrong email/password",Toast.LENGTH_SHORT).show()
 
                 }else Toast.makeText(context,"Empty Field",Toast.LENGTH_SHORT).show()
-
-            }else Toast.makeText(context,"Server not found",Toast.LENGTH_SHORT).show()
-
-
+            }else Toast.makeText(context,"Sever not found",Toast.LENGTH_SHORT).show()
         }
-
-
     }
 }

@@ -36,39 +36,12 @@ class ColorList : Fragment(),OnClickItemsColor{
         setHasOptionsMenu(true)
 
         mCompositeDisposable = CompositeDisposable()
-
-        pref = context!!.getSharedPreferences("user_details", MODE_PRIVATE)
-        val userName = pref.getString("password","User ")!!
-        if (userName.contains("cityslicka")) {
-            Toast.makeText(context, "Hello, eve! ", Toast.LENGTH_SHORT).show()
-        }
-        else if (userName.contains("pistol")) {
-            Toast.makeText(context, "Hello, holt! ", Toast.LENGTH_SHORT).show()
-        }
+        sessionGreetUser()
 
     }
     override fun onResume() {
         super.onResume()
-
-        val retrofit = RetrofitInit.create()
-        mCompositeDisposable?.add(retrofit.getAllColors()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe {
-                handleResponse(it.data)
-                d("-->COLOR_DETAILS<--", it.data.toString())
-            })
-    }
-
-    private fun handleResponse(data: List<ColorDataModels>) {
-        val recyclerView = view!!.findViewById<RecyclerView>(R.id.color_list_RecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.hasFixedSize()
-
-        val adapter = CustomAdapter(data,this)
-        recyclerView.adapter = adapter
-        adapter.notifyDataSetChanged()
-
+        getResponse()
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_color_list, container, false)
@@ -114,7 +87,36 @@ class ColorList : Fragment(),OnClickItemsColor{
         d("c",color)
         navController?.navigate(R.id.action_colorList_to_colorDetails)
     }
+    private fun getResponse() {
+        val retrofit = RetrofitInit.create()
+        mCompositeDisposable?.add(retrofit.getAllColors()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                handleResponse(it.data)
+                d("-->COLOR_DETAILS<--", it.data.toString())
+            })
+    }
+    private fun handleResponse(data: List<ColorDataModels>) {
+        val recyclerView = view!!.findViewById<RecyclerView>(R.id.color_list_RecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.hasFixedSize()
 
+        val adapter = CustomAdapter(data,this)
+        recyclerView.adapter = adapter
+        adapter.notifyDataSetChanged()
+
+    }
+    private fun sessionGreetUser() {
+        pref = context!!.getSharedPreferences("user_details", MODE_PRIVATE)
+        val userName = pref.getString("password","User ")!!
+        if (userName.contains("cityslicka")) {
+            Toast.makeText(context, "Hello, eve! ", Toast.LENGTH_SHORT).show()
+        }
+        else if (userName.contains("pistol")) {
+            Toast.makeText(context, "Hello, holt! ", Toast.LENGTH_SHORT).show()
+        }
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         mCompositeDisposable?.clear()
