@@ -95,7 +95,7 @@ class ColorList : Fragment(),OnClickItemsColor{
             .subscribe {
                 handleResponse(it.data)
                 d("-->COLOR_DETAILS<--", it.data.toString())
-                d("-->COLOR_DETAILS<--", it.data.toString())
+
 
             })
     }
