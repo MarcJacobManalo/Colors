@@ -13,7 +13,7 @@ interface GetUserService {
     @GET("api/unknown")
     fun getAllColors(): Observable<ColorDataObjectModel>
 
-    @FormUrlEncoded
+
     @POST("api/login")
     fun loginEmailPassword(@Body loginData: LoginDataModels): Call <LoginDataModels>
 

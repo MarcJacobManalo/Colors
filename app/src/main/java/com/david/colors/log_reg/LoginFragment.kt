@@ -15,7 +15,10 @@ import android.util.Log.d
 import com.david.colors.R
 import com.david.colors.`interface`.RetrofitInit
 import com.david.colors.model.LoginDataModels
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Response
 
@@ -92,7 +95,7 @@ class LoginFragment : Fragment(),View.OnClickListener {
 
         val retrofitInit = RetrofitInit.create().loginEmailPassword(credentials)
 
-       retrofitInit.enqueue(object : retrofit2.Callback<LoginDataModels> {
+     retrofitInit.enqueue(object : retrofit2.Callback<LoginDataModels> {
 
             override fun onResponse(call: Call<LoginDataModels>, response: Response<LoginDataModels>) {
                 val code = response.code()
