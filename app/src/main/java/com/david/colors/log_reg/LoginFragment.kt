@@ -85,7 +85,7 @@ class LoginFragment : Fragment(),View.OnClickListener {
             .subscribe { t: Response<LoginDataObjectModels>? ->
                 if (t?.isSuccessful!!){
                     login(t.code())
-                    d("success!",t.code().toString())
+                    d("successful!",t.code().toString())
                 }else d("failed!",t.code().toString())
 
 
