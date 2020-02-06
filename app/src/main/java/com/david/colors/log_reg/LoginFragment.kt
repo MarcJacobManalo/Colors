@@ -15,26 +15,21 @@ import android.util.Log.d
 import com.david.colors.R
 import com.david.colors.`interface`.RetrofitInit
 import com.david.colors.model.LoginDataModels
-import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import retrofit2.Call
 import retrofit2.Response
-
 
 class LoginFragment : Fragment(),View.OnClickListener {
 
 
      private var navController: NavController? = null
      private lateinit var pref: SharedPreferences
-    private var mCompositeDisposable : CompositeDisposable? = null
+     private var mCompositeDisposable : CompositeDisposable? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
         mCompositeDisposable = CompositeDisposable()
         postRequest()
     }
@@ -42,17 +37,6 @@ class LoginFragment : Fragment(),View.OnClickListener {
     override fun onResume() {
          super.onResume()
          session()
-     }
-
-     private fun session() {
-         pref = context!!.getSharedPreferences("user_details", MODE_PRIVATE)
-         if (pref.contains("username")) {
-             navController?.navigate(R.id.action_loginFragment_to_colorList)
-         }
-
-         d("tag",pref.contains("username").toString())
-         d("tag",pref.contains("password").toString())
-
      }
 
      override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -92,30 +76,43 @@ class LoginFragment : Fragment(),View.OnClickListener {
     private fun postRequest() {
 
         val credentials = LoginDataModels("eve.holt@reqres.in","cityslicka")
-
         val retrofitInit = RetrofitInit.create().loginEmailPassword(credentials)
+            mCompositeDisposable?.add(retrofitInit.subscribe(
+                {
+                    if(it.isSuccessful){
+                        val responseCode:Int = it.code()
+                        login(responseCode)
+                        d("onSuccessResponse::",responseCode.toString())}
 
-     retrofitInit.enqueue(object : retrofit2.Callback<LoginDataModels> {
+                },{
+                    d("onFailResponse::",it.message.toString()) }))
 
-            override fun onResponse(call: Call<LoginDataModels>, response: Response<LoginDataModels>) {
-                val code = response.code()
-                d("onResponse",code.toString())
-                login(code)
-            }
-            override fun onFailure(call: Call<LoginDataModels>, t: Throwable) {
-                d("onFailure",t.message.toString())
-            }
-        })
+//        retrofitInit.map { t: Response<LoginDataModels> ->
+//            val codeSuccess = t.code()
+//            login(codeSuccess)
+//        }
+
+//        mCompositeDisposable?.add(retrofitInit.subscribe {t: Response<LoginDataModels>? ->
+//            if(t?.isSuccessful!!){
+//                val responseCode:Int = t.code()
+//                login(t.code())
+//             d("onSuccessResponse::",responseCode.toString())}
+//            else  d("onSuccessResponse::",t.message())
+//
+//
+//    }
+//             )
 
     }
-    private fun login(code:Int) {
+    private fun login(responseCode:Int) {
 
         val submitBtn = view?.findViewById<Button>(R.id.btn_login)
         submitBtn?.setOnClickListener{
 
             val username = tv_user.text.toString().trim()
             val password = tv_pass.text.toString().trim()
-            if(code == 200){
+
+            if (responseCode == 200) {
                 if (!(username.isEmpty() && password.isEmpty())) {
                     if(username == "eve.holt@reqres.in" && password == "cityslicka"){
                         val editor = pref.edit()
@@ -124,11 +121,23 @@ class LoginFragment : Fragment(),View.OnClickListener {
                         editor.apply()
                         navController?.navigate(R.id.action_loginFragment_to_colorList)
                         Toast.makeText(context,"Login Successful",Toast.LENGTH_SHORT).show()
-
                     }else Toast.makeText(context,"Wrong email/password",Toast.LENGTH_SHORT).show()
-
                 }else Toast.makeText(context,"Empty Field",Toast.LENGTH_SHORT).show()
-            }else Toast.makeText(context,"Sever not found",Toast.LENGTH_SHORT).show()
+            }else Toast.makeText(context,"Cant access request",Toast.LENGTH_SHORT).show()
         }
+    }
+    private fun session() {
+        pref = context!!.getSharedPreferences("user_details", MODE_PRIVATE)
+        if (pref.contains("username")) {
+            navController?.navigate(R.id.action_loginFragment_to_colorList)
+        }
+
+        d("SaveSessionUsername",pref.contains("username").toString())
+        d("SaveSessionPassword",pref.contains("password").toString())
+
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        mCompositeDisposable?.clear()
     }
 }
