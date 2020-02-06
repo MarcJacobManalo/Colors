@@ -85,7 +85,7 @@ class LoginFragment : Fragment(),View.OnClickListener {
                         d("onSuccessResponse::",responseCode.toString())}
 
                 },{
-                    d("onFailResponsee::",it.message.toString()) }))
+                    d("onFailResponse::",it.message.toString()) }))
 
 //        retrofitInit.map { t: Response<LoginDataModels> ->
 //            val codeSuccess = t.code()
