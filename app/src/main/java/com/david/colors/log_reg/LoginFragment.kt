@@ -82,7 +82,7 @@ class LoginFragment : Fragment(),View.OnClickListener {
                     if(it.isSuccessful){
                         val responseCode:Int = it.code()
                         login(responseCode)
-                        d("onSuccessResponsee::",responseCode.toString())}
+                        d("onSuccessResponse::",responseCode.toString())}
 
                 },{
                     d("onFailResponsee::",it.message.toString()) }))
