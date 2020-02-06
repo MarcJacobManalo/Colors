@@ -3,6 +3,7 @@ package com.david.colors.`interface`
 
 import com.david.colors.model.ColorDataObjectModel
 import com.david.colors.model.LoginDataModels
+import com.david.colors.model.LoginDataObjectModels
 import com.david.colors.model.RegisterDataModels
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -16,10 +17,9 @@ interface GetUserService {
     fun getAllColors(): Observable<ColorDataObjectModel>
 
     @POST("api/login")
-    fun loginEmailPassword(@Body loginData: LoginDataModels): Single <Response <LoginDataModels>>
+    fun loginEmailPassword(@Body loginData: LoginDataModels): Single <Response <LoginDataObjectModels>>
 
     @POST("api/register")
     fun registerEmailPassword(@Body registerData: RegisterDataModels): Call<RegisterDataModels>
-
 
 }

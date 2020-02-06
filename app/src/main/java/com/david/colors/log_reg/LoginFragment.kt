@@ -15,17 +15,19 @@ import android.util.Log.d
 import com.david.colors.R
 import com.david.colors.`interface`.RetrofitInit
 import com.david.colors.model.LoginDataModels
+import com.david.colors.model.LoginDataObjectModels
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import org.reactivestreams.Subscriber
 import retrofit2.Response
 
 class LoginFragment : Fragment(),View.OnClickListener {
 
-
      private var navController: NavController? = null
      private lateinit var pref: SharedPreferences
      private var mCompositeDisposable : CompositeDisposable? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,33 +79,19 @@ class LoginFragment : Fragment(),View.OnClickListener {
 
         val credentials = LoginDataModels("eve.holt@reqres.in","cityslicka")
         val retrofitInit = RetrofitInit.create().loginEmailPassword(credentials)
-            mCompositeDisposable?.add(retrofitInit.subscribe(
-                {
-                    if(it.isSuccessful){
-                        val responseCode:Int = it.code()
-                        login(responseCode)
-                        d("onSuccessResponse::",responseCode.toString())}
+        mCompositeDisposable?.add(retrofitInit
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe { t: Response<LoginDataObjectModels>? ->
+                if (t?.isSuccessful!!){
+                    login(t.code())
+                    d("success!",t.code().toString())
+                }else d("failed!",t.code().toString())
 
-                },{
-                    d("onFailResponsee::",it.message.toString()) }))
 
-//        retrofitInit.map { t: Response<LoginDataModels> ->
-//            val codeSuccess = t.code()
-//            login(codeSuccess)
-//        }
-
-//        mCompositeDisposable?.add(retrofitInit.subscribe {t: Response<LoginDataModels>? ->
-//            if(t?.isSuccessful!!){
-//                val responseCode:Int = t.code()
-//                login(t.code())
-//             d("onSuccessResponse::",responseCode.toString())}
-//            else  d("onSuccessResponse::",t.message())
-//
-//
-//    }
-//             )
-
+            })
     }
+
     private fun login(responseCode:Int) {
 
         val submitBtn = view?.findViewById<Button>(R.id.btn_login)
@@ -126,6 +114,7 @@ class LoginFragment : Fragment(),View.OnClickListener {
             }else Toast.makeText(context,"Cant access request",Toast.LENGTH_SHORT).show()
         }
     }
+
     private fun session() {
         pref = context!!.getSharedPreferences("user_details", MODE_PRIVATE)
         if (pref.contains("username")) {
@@ -136,6 +125,7 @@ class LoginFragment : Fragment(),View.OnClickListener {
         d("SaveSessionPassword",pref.contains("password").toString())
 
     }
+
     override fun onDestroy() {
         super.onDestroy()
         mCompositeDisposable?.clear()
