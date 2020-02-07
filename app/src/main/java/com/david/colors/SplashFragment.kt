@@ -21,8 +21,7 @@ class SplashFragment : Fragment() {
 
         Handler().postDelayed({
             context?.let{
-                findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
-            }
+                findNavController().navigate(R.id.action_splashFragment_to_loginFragment) }
 
         },1000)
     }

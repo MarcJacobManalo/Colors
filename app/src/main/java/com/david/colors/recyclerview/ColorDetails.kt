@@ -18,25 +18,18 @@ class ColorDetails : Fragment() {
 
     private lateinit var pref: SharedPreferences
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_color_details, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         pref = activity!!.getSharedPreferences("SP",MODE_PRIVATE)
-
         val cName = pref.getString("NAME","def").toString()
         val cPan = pref.getString("PANTONE","def").toString()
         val cCol = pref.getString("COLOR","def").toString()
@@ -54,6 +47,7 @@ class ColorDetails : Fragment() {
         pantoneD.text = cPan
         bg.setBackgroundColor(Color.parseColor(cCol))
     }
+
    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         super.onCreateOptionsMenu(menu, inflater)

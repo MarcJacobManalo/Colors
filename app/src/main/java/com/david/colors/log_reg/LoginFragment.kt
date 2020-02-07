@@ -15,12 +15,10 @@ import android.util.Log.d
 import com.david.colors.R
 import com.david.colors.`interface`.RetrofitInit
 import com.david.colors.model.LoginDataModels
-import com.david.colors.model.LoginDataObjectModels
+import com.david.colors.model.Token
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import org.reactivestreams.Subscriber
 import retrofit2.Response
 
 class LoginFragment : Fragment(),View.OnClickListener {
@@ -33,17 +31,16 @@ class LoginFragment : Fragment(),View.OnClickListener {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         mCompositeDisposable = CompositeDisposable()
-        postRequest()
     }
 
     override fun onResume() {
          super.onResume()
          session()
+         postRequest()
      }
 
      override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login, container, false)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,42 +50,36 @@ class LoginFragment : Fragment(),View.OnClickListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         super.onCreateOptionsMenu(menu, inflater)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         inflater.inflate(R.menu.actionbar_items_layout,menu)
 
         for (i in 0 until menu.size())
             menu.getItem(i).isVisible = false
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.opSetting -> Toast.makeText(context,"Setting!",Toast.LENGTH_SHORT).show()
-        }
+            R.id.opSetting -> Toast.makeText(context,"Setting!",Toast.LENGTH_SHORT).show() }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onClick(v: View) {
        when(v.id) {
-           R.id.btn_register -> navController?.navigate(R.id.action_loginFragment_to_registerFragment)
-        }
+           R.id.btn_register -> navController?.navigate(R.id.action_loginFragment_to_registerFragment) }
     }
 
     private fun postRequest() {
-
         val credentials = LoginDataModels("eve.holt@reqres.in","cityslicka")
         val retrofitInit = RetrofitInit.create().loginEmailPassword(credentials)
         mCompositeDisposable?.add(retrofitInit
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe { t: Response<LoginDataObjectModels>? ->
+            .subscribe { t: Response<Token>? ->
                 if (t?.isSuccessful!!){
                     login(t.code())
                     d("successful!",t.code().toString())
                 }else d("failed!",t.code().toString())
-
-
             })
     }
 
@@ -118,8 +109,7 @@ class LoginFragment : Fragment(),View.OnClickListener {
     private fun session() {
         pref = context!!.getSharedPreferences("user_details", MODE_PRIVATE)
         if (pref.contains("username")) {
-            navController?.navigate(R.id.action_loginFragment_to_colorList)
-        }
+            navController?.navigate(R.id.action_loginFragment_to_colorList) }
 
         d("SaveSessionUsername",pref.contains("username").toString())
         d("SaveSessionPassword",pref.contains("password").toString())

@@ -34,30 +34,29 @@ class ColorList : Fragment(),OnClickItemsColor{
     override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-
         mCompositeDisposable = CompositeDisposable()
         sessionGreetUser()
-
     }
     override fun onResume() {
         super.onResume()
         getResponse()
     }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_color_list, container, false)
-
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
-
     }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.actionbar_items_layout, menu)
-
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {
               R.id.opLogout -> {
@@ -65,13 +64,13 @@ class ColorList : Fragment(),OnClickItemsColor{
                 editor.clear()
                 editor.apply()
                 navController?.navigate(R.id.action_colorList_to_loginFragment)
-
             }
              R.id.opSetting -> Toast.makeText(activity, "Setting!", Toast.LENGTH_SHORT).show()
         }
 
         return super.onOptionsItemSelected(item)
     }
+
     override fun onItemClicked(item: ColorDataModels, position: Int) {
         val name = item.name
         val pantone = item.pantone_value
@@ -95,10 +94,9 @@ class ColorList : Fragment(),OnClickItemsColor{
             .subscribe {
                 handleResponse(it.data)
                 d("-->COLOR_DETAILS<--", it.data.toString())
-
-
             })
     }
+
     private fun handleResponse(data: List<ColorDataModels>) {
         val recyclerView = view!!.findViewById<RecyclerView>(R.id.color_list_RecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -113,12 +111,11 @@ class ColorList : Fragment(),OnClickItemsColor{
         pref = context!!.getSharedPreferences("user_details", MODE_PRIVATE)
         val userName = pref.getString("password","User ")!!
         if (userName.contains("cityslicka")) {
-            Toast.makeText(context, "Hello, eve! ", Toast.LENGTH_SHORT).show()
-        }
+            Toast.makeText(context, "Hello, eve! ", Toast.LENGTH_SHORT).show() }
         else if (userName.contains("pistol")) {
-            Toast.makeText(context, "Hello, holt! ", Toast.LENGTH_SHORT).show()
-        }
+            Toast.makeText(context, "Hello, holt! ", Toast.LENGTH_SHORT).show() }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         mCompositeDisposable?.clear()
