@@ -67,8 +67,8 @@ class RegisterFragment : Fragment(){
             .subscribe { t: Response<Token>? ->
                 if (t?.isSuccessful!!){
                     login(t.code())
-                    d("successful!",t.code().toString()) }
-                else d("failed!",t.code().toString())
+                    d("successful!:",t.code().toString()) }
+                else d("failed!:",t.code().toString())
             })
     }
 
