@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.david.colors.R
+import kotlinx.android.synthetic.main.fragment_color_details.*
 
 
 class ColorDetails : Fragment() {
@@ -22,35 +23,19 @@ class ColorDetails : Fragment() {
         return inflater.inflate(R.layout.fragment_color_details, container, false)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        pref = activity!!.getSharedPreferences("SP",MODE_PRIVATE)
-        val cName = pref.getString("NAME","def").toString()
-        val cPan = pref.getString("PANTONE","def").toString()
-        val cCol = pref.getString("COLOR","def").toString()
+        pref = requireContext().getSharedPreferences("SP",MODE_PRIVATE)
+        val colorName = pref.getString("NAME","def").toString()
+        val colorPan = pref.getString("PANTONE","def").toString()
+        val colorCol = pref.getString("COLOR","def").toString()
 
-        Log.d("n", cName)
-        Log.d("p", cPan)
-        Log.d("c", cCol)
+        val checkColorDetails = "Name: $colorName"+"Pantone: $colorPan"+"Color: $colorCol"
+        Log.d("n", checkColorDetails)
 
-        val colorD = view.findViewById<TextView>(R.id.color_d)
-        val nameD = view.findViewById<TextView>(R.id.name_d)
-        val pantoneD = view.findViewById<TextView>(R.id.pantone_d)
-        val bg = view.findViewById<LinearLayout>(R.id.color_bg)
-        colorD.text = cCol
-        nameD.text = cName
-        pantoneD.text = cPan
-        bg.setBackgroundColor(Color.parseColor(cCol))
-    }
-
-   override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-       (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        super.onCreateOptionsMenu(menu, inflater)
-
+        tv_color.text = colorCol
+        tv_name.text = colorName
+        tv_pantone.text = colorPan
+        fragment_bg.setBackgroundColor(Color.parseColor(colorCol))
     }
 }

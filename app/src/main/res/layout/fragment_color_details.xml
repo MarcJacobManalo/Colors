@@ -6,11 +6,11 @@
     tools:context=".ColorDetails"
     android:orientation="vertical"
     android:gravity="center"
-    android:id="@+id/color_bg">
+    android:id="@+id/fragment_bg">
 
 
     <TextView
-        android:id="@+id/name_d"
+        android:id="@+id/tv_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="NAME"
@@ -19,7 +19,7 @@
         android:textSize="30sp"
         android:textAlignment="center"/>
     <TextView
-        android:id="@+id/pantone_d"
+        android:id="@+id/tv_pantone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="PANTONE"
@@ -28,7 +28,7 @@
         android:textSize="30sp"
         android:textAlignment="center"/>
     <TextView
-        android:id="@+id/color_d"
+        android:id="@+id/tv_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="COLOR"

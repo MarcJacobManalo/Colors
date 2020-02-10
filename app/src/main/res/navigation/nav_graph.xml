@@ -45,6 +45,9 @@
             app:destination="@id/colorList"
             app:popUpTo="@id/registerFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 
     <fragment

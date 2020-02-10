@@ -1,11 +1,9 @@
 package com.david.colors.`interface`
 
 
-import com.david.colors.model.ColorDataObjectModel
-import com.david.colors.model.LoginDataModels
-import com.david.colors.model.Token
-import com.david.colors.model.RegisterDataModels
-import io.reactivex.Observable
+import com.david.colors.model.ColorList
+import com.david.colors.model.LogRegRequest
+import com.david.colors.model.LogRegResponse
 import io.reactivex.Single
 import retrofit2.Response
 import retrofit2.http.*
@@ -13,14 +11,15 @@ import retrofit2.http.*
 interface GetUserService {
 
     @GET("api/unknown")
-    fun getAllColors(): Observable<ColorDataObjectModel>
+    fun getAllColors():
+            Single<Response<ColorList>>
 
     @POST("api/login")
-    fun loginEmailPassword(@Body loginData: LoginDataModels):
-            Single <Response <Token>>
+    fun loginEmailPassword(@Body loginData: LogRegRequest):
+            Single <Response <LogRegResponse>>
 
     @POST("api/register")
-    fun registerEmailPassword(@Body registerData: RegisterDataModels):
-            Single<Response<Token>>
+    fun registerEmailPassword(@Body registerData: LogRegRequest):
+            Single<Response<LogRegResponse>>
 
 }

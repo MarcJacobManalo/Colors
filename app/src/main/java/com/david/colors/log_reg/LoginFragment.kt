@@ -4,9 +4,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import android.widget.Button
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -14,8 +12,8 @@ import android.content.Context.MODE_PRIVATE
 import android.util.Log.d
 import com.david.colors.R
 import com.david.colors.`interface`.RetrofitInit
-import com.david.colors.model.LoginDataModels
-import com.david.colors.model.Token
+import com.david.colors.model.LogRegRequest
+import com.david.colors.model.LogRegResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -23,13 +21,12 @@ import retrofit2.Response
 
 class LoginFragment : Fragment(),View.OnClickListener {
 
-     private var navController: NavController? = null
-     private lateinit var pref: SharedPreferences
+     private var mNavController: NavController? = null
+     private lateinit var mPref: SharedPreferences
      private var mCompositeDisposable : CompositeDisposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
         mCompositeDisposable = CompositeDisposable()
     }
 
@@ -45,74 +42,71 @@ class LoginFragment : Fragment(),View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = Navigation.findNavController(view)
-        view.findViewById<Button>(R.id.btn_register).setOnClickListener(this)
+        mNavController = Navigation.findNavController(view)
+        btn_register.setOnClickListener(this)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        inflater.inflate(R.menu.actionbar_items_layout,menu)
-
-        for (i in 0 until menu.size())
-            menu.getItem(i).isVisible = false
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.opSetting -> Toast.makeText(context,"Setting!",Toast.LENGTH_SHORT).show() }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onClick(v: View) {
-       when(v.id) {
-           R.id.btn_register -> navController?.navigate(R.id.action_loginFragment_to_registerFragment) }
+    override fun onClick(v: View?) {
+       when(v?.id) {
+           R.id.btn_register -> mNavController?.navigate(R.id.action_loginFragment_to_registerFragment) }
     }
 
     private fun postRequest() {
-        val credentials = LoginDataModels("eve.holt@reqres.in","cityslicka")
+        val credentials = LogRegRequest("eve.holt@reqres.in","cityslicka") // should put the edittext here
         val retrofitInit = RetrofitInit.create().loginEmailPassword(credentials)
         mCompositeDisposable?.add(retrofitInit
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe { t: Response<Token>? ->
-                if (t?.isSuccessful!!){
-                    login(t.code())
-                    d("successful!:",t.code().toString())
-                }else d("failed!:",t.code().toString())
-            })
+            .subscribe{
+                    t1: Response<LogRegResponse>?, t2: Throwable? ->
+
+                if (t1 != null) {
+                    if (t1.isSuccessful) {
+                        login()
+                        d("successful", t1.code().toString()) }
+                    else{
+                        Toast.makeText(requireContext(),"No Internet Connection",Toast.LENGTH_SHORT).show()
+                        d("error", t2?.message.toString()) }
+                }
+
+            }
+        )
     }
-
-    private fun login(responseCode:Int) {
-
-        val submitBtn = view?.findViewById<Button>(R.id.btn_login)
-        submitBtn?.setOnClickListener{
-
+    /**
+     * TODO:
+     *
+     * Should remove the validation
+     * because the Api will handle it.
+     *
+     * Do this as well in register fragment.
+     *
+     * make a session/shareprefs as boolean.
+     * **/
+    private fun login() {
+        btn_login?.setOnClickListener{
             val username = tv_user.text.toString().trim()
             val password = tv_pass.text.toString().trim()
 
-            if (responseCode == 200) {
                 if (!(username.isEmpty() && password.isEmpty())) {
                     if(username == "eve.holt@reqres.in" && password == "cityslicka"){
-                        val editor = pref.edit()
+                        val editor = mPref.edit()
                         editor.putString("username",username)
                         editor.putString("password",password)
                         editor.apply()
-                        navController?.navigate(R.id.action_loginFragment_to_colorList)
-                        Toast.makeText(context,"Login Successful",Toast.LENGTH_SHORT).show()
-                    }else Toast.makeText(context,"Wrong email/password",Toast.LENGTH_SHORT).show()
-                }else Toast.makeText(context,"Empty Field",Toast.LENGTH_SHORT).show()
-            }else Toast.makeText(context,"Cant access request",Toast.LENGTH_SHORT).show()
+                        mNavController?.navigate(R.id.action_loginFragment_to_colorList)
+                        Toast.makeText(requireContext(),"Login Successful",Toast.LENGTH_SHORT).show()
+                    }else Toast.makeText(requireContext(),"Wrong email/password",Toast.LENGTH_SHORT).show()
+                }else Toast.makeText(requireContext(),"Empty Field",Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun session() {
-        pref = context!!.getSharedPreferences("user_details", MODE_PRIVATE)
-        if (pref.contains("username")) {
-            navController?.navigate(R.id.action_loginFragment_to_colorList) }
+        mPref = requireContext().getSharedPreferences("user_details", MODE_PRIVATE)
+        if (mPref.contains("username")) {
+            mNavController?.navigate(R.id.action_loginFragment_to_colorList) }
 
-        d("SaveSessionUsername",pref.contains("username").toString())
-        d("SaveSessionPassword",pref.contains("password").toString())
+        d("SaveSessionUsername",mPref.contains("username").toString())
+        d("SaveSessionPassword",mPref.contains("password").toString())
 
     }
 
