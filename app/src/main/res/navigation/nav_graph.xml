@@ -52,7 +52,7 @@
 
     <fragment
         android:id="@+id/colorList"
-        android:name="com.david.colors.recyclerview.ColorList"
+        android:name="com.david.colors.color_List_Details.ColorList"
         android:label="fragment_color_list"
         tools:layout="@layout/fragment_color_list" >
         <action
@@ -68,7 +68,7 @@
 
     <fragment
         android:id="@+id/colorDetails"
-        android:name="com.david.colors.recyclerview.ColorDetails"
+        android:name="com.david.colors.color_List_Details.ColorDetails"
         android:label="fragment_color_details"
         tools:layout="@layout/fragment_color_details" >
         <action

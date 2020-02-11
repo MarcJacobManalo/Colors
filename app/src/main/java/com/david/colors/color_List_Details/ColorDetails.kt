@@ -1,4 +1,4 @@
-package com.david.colors.recyclerview
+package com.david.colors.color_List_Details
 
 
 import android.content.Context.MODE_PRIVATE
@@ -7,9 +7,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.david.colors.R
 import kotlinx.android.synthetic.main.fragment_color_details.*
@@ -25,17 +22,12 @@ class ColorDetails : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        pref = requireContext().getSharedPreferences("SP",MODE_PRIVATE)
-        val colorName = pref.getString("NAME","def").toString()
-        val colorPan = pref.getString("PANTONE","def").toString()
-        val colorCol = pref.getString("COLOR","def").toString()
+        pref = requireContext().getSharedPreferences("ColorAttributes",MODE_PRIVATE)
 
-        val checkColorDetails = "Name: $colorName"+"Pantone: $colorPan"+"Color: $colorCol"
-        Log.d("n", checkColorDetails)
-
-        tv_color.text = colorCol
-        tv_name.text = colorName
-        tv_pantone.text = colorPan
-        fragment_bg.setBackgroundColor(Color.parseColor(colorCol))
+        tv_color.text =  pref.getString("COLOR","def").toString()
+        tv_name.text = pref.getString("NAME","def").toString()
+        tv_pantone.text = pref.getString("PANTONE","def").toString()
+        val bgColor = tv_color.text.toString()
+        fragment_bg.setBackgroundColor(Color.parseColor(bgColor))
     }
 }

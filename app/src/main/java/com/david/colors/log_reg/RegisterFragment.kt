@@ -1,7 +1,5 @@
 package com.david.colors.log_reg
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log.d
 import android.view.*
@@ -22,15 +20,13 @@ import retrofit2.Response
 
 class RegisterFragment : Fragment(),View.OnClickListener{
 
-
     private var mNavController: NavController? = null
-    private lateinit var mPref: SharedPreferences
     private var mCompositeDisposable : CompositeDisposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mCompositeDisposable = CompositeDisposable()
-        postRequest()
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -41,52 +37,51 @@ class RegisterFragment : Fragment(),View.OnClickListener{
         super.onViewCreated(view, savedInstanceState)
         mNavController = Navigation.findNavController(view)
         btn_navLogin.setOnClickListener(this)
+        btn_register_reg_frag.setOnClickListener(this)
     }
+
     override fun onClick(v: View?) {
+        val username = tv_user_reg_frag.text.toString().trim()
+        val password = tv_pass_reg_frag.text.toString().trim()
+
         when(v?.id){
             R.id.btn_navLogin -> mNavController?.navigate(R.id.action_registerFragment_to_loginFragment)
+            R.id.btn_register_reg_frag -> postRequest(username,password)
         }
     }
 
-    private fun postRequest() {
-        val credentials = LogRegRequest("eve.holt@reqres.in","pistol")
-        val retrofitInit = RetrofitInit.create().registerEmailPassword(credentials)
+    private fun postRequest(username:String,password:String) {
+            closeKeyBoard()
+            val credentials = LogRegRequest(username,password)
+            val retrofitInit = RetrofitInit.create().registerEmailPassword(credentials)
         mCompositeDisposable?.add(retrofitInit
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe{
                     t1: Response<LogRegResponse>?, t2: Throwable? ->
-
                 if (t1 != null) {
                     if (t1.isSuccessful) {
-                        d("success", t1.code().toString())
-                        register()}
+                        register()
+                        d("Register Successful", t1.code().toString()) }
                     else{
-                        Toast.makeText(requireContext(),"No Internet Connection",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(),"Register Failed",Toast.LENGTH_SHORT).show()
                         d("error", t2?.message.toString())}
                 }
+            })
 
-            }
-        )
     }
 
     private fun register() {
-        btn_register_reg_frag?.setOnClickListener{
-            val username = tv_user_reg_frag.text.toString().trim()
-            val password = tv_pass_reg_frag.text.toString().trim()
+        Toast.makeText(requireContext(),"Register Successful",Toast.LENGTH_SHORT).show()
+        mNavController?.navigate(R.id.action_registerFragment_to_colorList)
 
-                if (!(username.isEmpty() && password.isEmpty())) {
-                    if(username == "eve.holt@reqres.in" && password == "pistol"){
-                        mPref = requireContext().getSharedPreferences("user_details", Context.MODE_PRIVATE)
-                        val editor = mPref.edit()
-                        editor.putString("username",username)
-                        editor.putString("password",password)
-                        editor.apply()
-                        mNavController?.navigate(R.id.action_registerFragment_to_colorList)
-                        Toast.makeText(requireContext(),"Register Successful",Toast.LENGTH_SHORT).show()
-                    }else Toast.makeText(requireContext(),"Wrong email/password",Toast.LENGTH_SHORT).show()
-                }else Toast.makeText(requireContext(),"Empty Field",Toast.LENGTH_SHORT).show()
+    }
 
+    private fun closeKeyBoard(){
+        val keyboard = LoginFragment()
+        keyboard.closeKeyboard()
+        let {
+            return@let keyboard
         }
     }
 
