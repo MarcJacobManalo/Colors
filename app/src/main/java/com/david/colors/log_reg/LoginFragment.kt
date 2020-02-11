@@ -59,7 +59,7 @@ class LoginFragment : Fragment(),View.OnClickListener {
                       t1: Response<LogRegResponse>?, t2: Throwable? ->
                   if (t1 != null) {
                       if (t1.isSuccessful) {
-                          d("Token---",t1.body()?.token.toString())
+                          d("Token----",t1.body()?.token.toString())
                           login() }
                       else{
                           Toast.makeText(requireContext(),t1.body()?.error.toString(),Toast.LENGTH_SHORT).show()
