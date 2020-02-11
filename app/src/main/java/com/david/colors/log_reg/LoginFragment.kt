@@ -63,7 +63,7 @@ class LoginFragment : Fragment(),View.OnClickListener {
                           login() }
                       else{
                           Toast.makeText(requireContext(),t1.body()?.error.toString(),Toast.LENGTH_SHORT).show()
-                          d("Error", t2?.message.toString())
+                          d("Error----", t2?.message.toString())
                           }
                   }
               })
