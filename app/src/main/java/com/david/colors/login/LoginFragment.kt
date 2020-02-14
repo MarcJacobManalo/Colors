@@ -45,7 +45,7 @@ class LoginFragment : Fragment(), View.OnClickListener, LoginMvp.View {
         presenter.onLoginRequest(email,password) }
 
     override fun onSuccessLogin() {
-        Toast.makeText(requireContext(),"Login Successful!",Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(),"Login Successful",Toast.LENGTH_SHORT).show()
         mNavController?.navigate(R.id.action_loginFragment_to_colorList) }
 
     override fun onFailedLogin(error:String) {
