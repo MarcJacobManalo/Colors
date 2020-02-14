@@ -1,8 +1,9 @@
-package com.david.colors
+package com.david.colors.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.findNavController
+import com.david.colors.R
 
 class MainActivity : AppCompatActivity() {
 

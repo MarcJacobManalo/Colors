@@ -1,4 +1,4 @@
-package com.david.colors
+package com.david.colors.main
 
 import android.os.Bundle
 import android.os.Handler
@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.david.colors.R
 
 class SplashFragment : Fragment() {
 

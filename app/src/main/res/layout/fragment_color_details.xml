@@ -13,27 +13,24 @@
         android:id="@+id/tv_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="NAME"
-        android:textColor="#ffffff"
         android:textStyle="bold"
+        android:textColor="#ffffff"
         android:textSize="30sp"
         android:textAlignment="center"/>
     <TextView
         android:id="@+id/tv_pantone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="PANTONE"
-        android:textColor="#ffffff"
         android:textStyle="bold"
+        android:textColor="#ffffff"
         android:textSize="30sp"
         android:textAlignment="center"/>
     <TextView
         android:id="@+id/tv_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="COLOR"
-        android:textColor="#ffffff"
         android:textStyle="bold"
+        android:textColor="#ffffff"
         android:textSize="30sp"
         android:textAlignment="center"/>
 

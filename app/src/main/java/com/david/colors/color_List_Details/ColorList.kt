@@ -1,6 +1,5 @@
 package com.david.colors.color_List_Details
 
-import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import android.util.Log.d
 import android.view.*
@@ -8,30 +7,30 @@ import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.david.colors.adapter.CustomAdapter
 import com.david.colors.adapter.OnClickItemsColor
 import com.david.colors.model.Color
-import android.content.SharedPreferences
 import com.david.colors.R
-import com.david.colors.`interface`.RetrofitInit
+import com.david.colors.adapter.ColorAdapter
+import com.david.colors.model.api.RetrofitInit
 import com.david.colors.model.ColorList
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_color_list.*
 import retrofit2.Response
+import java.util.*
 
 
 class ColorList : Fragment(),OnClickItemsColor{
 
-    private var mNavController: NavController?= null
+    private var mNavController: NavController? = null
     private var mCompositeDisposable : CompositeDisposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mCompositeDisposable = CompositeDisposable()
-
     }
 
     override fun onResume() {
@@ -50,13 +49,13 @@ class ColorList : Fragment(),OnClickItemsColor{
     }
 
     override fun onItemClicked(item: Color, position: Int) {
-        val editor = requireContext().getSharedPreferences("ColorAttributes",MODE_PRIVATE).edit()
-        editor.putString("NAME",item.name)
-        editor.putString("PANTONE",item.pantone_value)
-        editor.putString("COLOR",item.color)
-        editor.apply()
+        val colorAttributes = arrayOf(
+            item.color.toString().toUpperCase(Locale.ENGLISH),
+            item.pantone_value.toString().toUpperCase(Locale.ENGLISH),
+            item.name.toString().toUpperCase(Locale.ENGLISH))
 
-        mNavController?.navigate(R.id.action_colorList_to_colorDetails)
+        val action = ColorListDirections.actionColorListToColorDetails(colorAttributes)
+        findNavController().navigate(action)
     }
 
     private fun getResponse() {
@@ -66,7 +65,6 @@ class ColorList : Fragment(),OnClickItemsColor{
             .subscribeOn(Schedulers.io())
             .subscribe{
                     t1: Response<ColorList>?, t2: Throwable? ->
-
                 if(t1 != null){
                     if (t1.isSuccessful){
                         t1.body()?.data?.let { colorList(it) } }
@@ -78,10 +76,10 @@ class ColorList : Fragment(),OnClickItemsColor{
     }
 
     private fun colorList(data: List<Color>) {
-        color_list_RecyclerView.layoutManager = LinearLayoutManager(context)
+        color_list_RecyclerView.layoutManager = LinearLayoutManager(requireContext())
         color_list_RecyclerView.hasFixedSize()
 
-        val adapter = CustomAdapter(data,this)
+        val adapter = ColorAdapter(data,this)
         color_list_RecyclerView.adapter = adapter
         adapter.notifyDataSetChanged()
 

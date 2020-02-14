@@ -1,4 +1,4 @@
-package com.david.colors.log_reg
+package com.david.colors.register
 
 import android.os.Bundle
 import android.util.Log.d
@@ -8,7 +8,8 @@ import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.david.colors.R
-import com.david.colors.`interface`.RetrofitInit
+import com.david.colors.login.LoginFragment
+import com.david.colors.model.api.RetrofitInit
 import com.david.colors.model.LogRegRequest
 import com.david.colors.model.LogRegResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -51,7 +52,7 @@ class RegisterFragment : Fragment(),View.OnClickListener{
     }
 
     private fun postRequest(username:String,password:String) {
-            closeKeyBoard()
+            //closeKeyBoard()
             val credentials = LogRegRequest(username,password)
             val retrofitInit = RetrofitInit.create().registerEmailPassword(credentials)
         mCompositeDisposable?.add(retrofitInit
@@ -68,7 +69,6 @@ class RegisterFragment : Fragment(),View.OnClickListener{
                         d("error", t2?.message.toString())}
                 }
             })
-
     }
 
     private fun register() {
@@ -77,13 +77,13 @@ class RegisterFragment : Fragment(),View.OnClickListener{
 
     }
 
-    private fun closeKeyBoard(){
-        val keyboard = LoginFragment()
-        keyboard.closeKeyboard()
-        let {
-            return@let keyboard
-        }
-    }
+//    private fun closeKeyBoard(){
+//        val keyboard = LoginFragment()
+//        keyboard.closeKeyboard()
+//        let {
+//            return@let keyboard
+//        }
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -1,4 +1,4 @@
-package com.david.colors.`interface`
+package com.david.colors.model.`interface`
 
 
 import com.david.colors.model.ColorList
@@ -10,15 +10,15 @@ import retrofit2.http.*
 
 interface GetUserService {
 
-    @GET("api/unknown")
+    @GET("Api/unknown")
     fun getAllColors():
             Single<Response<ColorList>>
 
-    @POST("api/login")
+    @POST("Api/login")
     fun loginEmailPassword(@Body loginData: LogRegRequest):
             Single <Response <LogRegResponse>>
 
-    @POST("api/register")
+    @POST("Api/register")
     fun registerEmailPassword(@Body registerData: LogRegRequest):
             Single<Response<LogRegResponse>>
 

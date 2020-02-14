@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.david.colors.SplashFragment"
+        android:name="com.david.colors.main.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" >
         <action
@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.david.colors.log_reg.LoginFragment"
+        android:name="com.david.colors.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -37,7 +37,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.david.colors.log_reg.RegisterFragment"
+        android:name="com.david.colors.register.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
@@ -54,16 +54,16 @@
         android:id="@+id/colorList"
         android:name="com.david.colors.color_List_Details.ColorList"
         android:label="fragment_color_list"
-        tools:layout="@layout/fragment_color_list" >
+        tools:layout="@layout/fragment_color_list">
         <action
             android:id="@+id/action_colorList_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@+id/loginFragment" />
         <action
             android:id="@+id/action_colorList_to_colorDetails"
             app:destination="@id/colorDetails" />
         <action
             android:id="@+id/action_colorList_to_registerFragment"
-            app:destination="@id/registerFragment" />
+            app:destination="@+id/registerFragment" />
     </fragment>
 
     <fragment
@@ -80,6 +80,9 @@
             android:id="@+id/action_colorDetails_to_loginFragment"
             app:destination="@id/loginFragment"
             />
+        <argument
+            android:name="colorAttributes"
+            app:argType="string[]" />
     </fragment>
 
 </navigation>

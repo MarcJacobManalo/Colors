@@ -8,7 +8,7 @@ import com.david.colors.R
 import com.david.colors.model.Color
 import kotlinx.android.synthetic.main.list_colors.view.*
 
-class CustomAdapter(private val colorList : List<Color> ,private var clickListener : OnClickItemsColor): RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
+class ColorAdapter(private val colorList : List<Color> ,private var clickListener : OnClickItemsColor): RecyclerView.Adapter<ColorAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.list_colors,parent,false)
