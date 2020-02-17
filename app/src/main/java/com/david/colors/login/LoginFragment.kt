@@ -16,11 +16,10 @@ class LoginFragment : Fragment(), View.OnClickListener, LoginMvp.View {
 
     private val presenter : Presenter by lazy { Presenter(this) }
     private var mNavController : NavController? = null
-    private var mCompositeDisposable : CompositeDisposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mCompositeDisposable = CompositeDisposable() }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_login, container, false) }
@@ -37,10 +36,10 @@ class LoginFragment : Fragment(), View.OnClickListener, LoginMvp.View {
 
         when(v?.id) {
             R.id.btn_register -> mNavController?.navigate(R.id.action_loginFragment_to_registerFragment)
-            R.id.btn_login -> onLoginRequests(email,password)
+            R.id.btn_login -> onLogin(email,password)
         } }
 
-    private fun onLoginRequests(email:String,password:String) {
+    private fun onLogin(email:String,password:String) {
         closeKeyboard()
         presenter.onLoginRequest(email,password) }
 
@@ -60,6 +59,7 @@ class LoginFragment : Fragment(), View.OnClickListener, LoginMvp.View {
 
     override fun onDestroy() {
         super.onDestroy()
-        mCompositeDisposable?.clear() }
+        presenter.clearDisposables()
+    }
 
 }

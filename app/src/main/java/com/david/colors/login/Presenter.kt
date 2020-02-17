@@ -1,10 +1,31 @@
 package com.david.colors.login
 
- class Presenter( view: LoginMvp.View): LoginMvp.Presenter{
+import com.david.colors.model.LogRegRequest
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import java.lang.IllegalArgumentException
 
-     private val model = Model(view)
+class Presenter(private val view: LoginMvp.View) : LoginMvp.Presenter {
 
-    override fun onLoginRequest(email:String,password:String) {
-        model.getLoginResponse(email,password)
+    private val model = LoginModel()
+    private val mCompositeDisposable: CompositeDisposable? = null
+
+    override fun onLoginRequest(email: String, password: String) {
+       val subscription = model.getLoginResponse(LogRegRequest(email, password))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+           .subscribe({
+               //do anything with LogRegResponse
+               view.onSuccessLogin()
+           },{
+               view.onFailedLogin(it.message ?: throw IllegalArgumentException("No error message"))
+           })
+        mCompositeDisposable?.add(subscription)
     }
+
+    override fun clearDisposables() {
+        mCompositeDisposable?.clear()
+    }
+
 }
