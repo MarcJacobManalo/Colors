@@ -63,16 +63,13 @@ class ColorList : Fragment(),OnClickItemsColor{
         mCompositeDisposable?.add(retrofit.getAllColors()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe{
-                    t1: Response<ColorList>?, t2: Throwable? ->
-                if(t1 != null){
-                    if (t1.isSuccessful){
-                        t1.body()?.data?.let { colorList(it) } }
+            .subscribe({ it ->
+                it.body()?.data?.let {
+                    colorList(it)
                 }
-                else{
-                    Toast.makeText(requireContext(),"No Internet Connection",Toast.LENGTH_SHORT).show()
-                    d("error", t2?.message.toString()) }
-            })
+            },{
+                Toast.makeText(requireContext(),"Error",Toast.LENGTH_SHORT).show()
+            }))
     }
 
     private fun colorList(data: List<Color>) {

@@ -1,14 +1,10 @@
 package com.david.colors.login
 
- class Presenter(val view: LoginMvp.View): LoginMvp.Presenter{
+ class Presenter( view: LoginMvp.View): LoginMvp.Presenter{
 
-
-
-     private val model = Model(this)
+     private val model = Model(view)
 
     override fun onLoginRequest(email:String,password:String) {
         model.getLoginResponse(email,password)
     }
-
-
 }

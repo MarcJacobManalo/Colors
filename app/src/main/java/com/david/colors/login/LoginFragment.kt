@@ -37,10 +37,10 @@ class LoginFragment : Fragment(), View.OnClickListener, LoginMvp.View {
 
         when(v?.id) {
             R.id.btn_register -> mNavController?.navigate(R.id.action_loginFragment_to_registerFragment)
-            R.id.btn_login -> onLoginRequest(email,password)
+            R.id.btn_login -> onLoginRequests(email,password)
         } }
 
-    private fun onLoginRequest(email:String,password:String) {
+    private fun onLoginRequests(email:String,password:String) {
         closeKeyboard()
         presenter.onLoginRequest(email,password) }
 
